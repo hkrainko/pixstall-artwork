@@ -38,6 +38,18 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to create channel %v", err)
 	}
+	err = ch.ExchangeDeclare(
+		"artwork",
+		"topic",
+		true,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		log.Fatalf("Failed to create exchange %v", err)
+	}
 
 	//commMsgBroker := InitCommissionMessageBroker(db, rbMQConn, awsS3, hub)
 	//go commMsgBroker.StartUpdateCommissionQueue()

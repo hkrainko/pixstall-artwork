@@ -1,5 +1,10 @@
 package msg_broker
 
-type Repo interface {
+import (
+	"context"
+	"pixstall-artwork/domain/artwork/model"
+)
 
+type Repo interface {
+	SendArtworkCreatedMessage(ctx context.Context, artwork model.Artwork) error
 }
