@@ -76,11 +76,13 @@ func (c *Commission) ToArtworkCreator() model.ArtworkCreator {
 		RequesterName:        c.RequesterName,
 		RequesterProfilePath: c.RequesterProfilePath,
 		Price:                c.Price,
+
 		DayUsed:              int(dayUsed),
 		Size:                 c.Size,
 		Volume:               0,
 		Resolution:           0,
 		Format:               "",
+
 		IsR18:                c.IsR18,
 		Anonymous:            c.Anonymous,
 		DisplayImagePath:     *c.DisplayImagePath,
