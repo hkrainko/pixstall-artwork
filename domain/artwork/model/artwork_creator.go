@@ -2,8 +2,7 @@ package model
 
 import "time"
 
-type Artwork struct {
-	ID               string `json:"id" bson:"id"`
+type ArtworkCreator struct {
 	CommissionID     string `json:"commissionId" bson:"commissionId"`
 	OpenCommissionID string `json:"openCommissionId" bson:"openCommissionId"`
 
@@ -28,17 +27,5 @@ type Artwork struct {
 	Rating             int     `json:"rating,omitempty" bson:"rating,omitempty"`
 	Comment            *string `json:"comment,omitempty" bson:"comment,omitempty"`
 
-	CreateTime     time.Time    `json:"createTime" bson:"createTime"`
 	CompleteTime   time.Time    `json:"completeTime" bson:"completeTime,omitempty"`
-	LastUpdateTime time.Time    `json:"lastUpdateTime" bson:"lastUpdateTime"`
-	State          ArtworkState `json:"state" bson:"state"`
 }
-
-type ArtworkState string
-
-const (
-	ArtworkStateActive    ArtworkState = "Active"
-	ArtworkStateHidden    ArtworkState = "Hidden"
-	ArtworkStateRemoved   ArtworkState = "Removed"
-	ArtworkStateForbidden ArtworkState = "Forbidden"
-)
