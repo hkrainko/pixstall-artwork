@@ -24,7 +24,7 @@ type Artwork struct {
 	IsR18      bool    `json:"isR18" bson:"isR18"`
 	Anonymous  bool    `json:"anonymous" bson:"anonymous"`
 
-	DisplayImagePath   string  `json:"displayImagePath,omitempty" bson:"displayImagePath,omitempty"`
+	DisplayImagePath   string  `json:"displayImagePath" bson:"displayImagePath"`
 	CompletionFilePath string  `json:"completionFilePath,omitempty" bson:"completionFilePath,omitempty"`
 	Rating             int     `json:"rating,omitempty" bson:"rating,omitempty"`
 	Comment            *string `json:"comment,omitempty" bson:"comment,omitempty"`

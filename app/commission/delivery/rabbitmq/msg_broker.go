@@ -116,5 +116,9 @@ func (c CommissionMessageBroker) completionToArtwork(ctx context.Context, body [
 	if err != nil {
 		return err
 	}
-	return c.artworkUseCase.AddArtwork(ctx, req.Commission)
+	_, err = c.artworkUseCase.AddArtwork(ctx, req.ToArtworkCreator())
+	if err != nil {
+		return err
+	}
+	return nil
 }

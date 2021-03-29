@@ -10,6 +10,8 @@ func (e DomainError) Error() string {
 		return "NotFoundError"
 	case UnAuthError:
 		return "UnAuthError"
+	case BadRequestError:
+		return "BadRequestError"
 	case UnknownError:
 		return "UnknownError"
 	default:
@@ -18,7 +20,8 @@ func (e DomainError) Error() string {
 }
 
 const (
-	NotFoundError DomainError = 10
-	UnAuthError   DomainError = 11
-	UnknownError  DomainError = 99
+	NotFoundError   DomainError = 10
+	UnAuthError     DomainError = 11
+	BadRequestError DomainError = 12
+	UnknownError    DomainError = 99
 )

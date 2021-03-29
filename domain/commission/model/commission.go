@@ -18,9 +18,9 @@ type Commission struct {
 
 	Price                          model.Price `json:"price" bson:"price"`
 	DayNeed                        int         `json:"dayNeed" bson:"dayNeed"`
-	Size                           *model.Size `json:"size" bson:"size,omitempty"`
-	Resolution                     *float64    `json:"resolution" bson:"resolution,omitempty"`
-	ExportFormat                   *string     `json:"exportFormat" bson:"exportFormat,omitempty"`
+	Size                           model.Size  `json:"size" bson:"size,omitempty"`
+	Resolution                     float64    `json:"resolution" bson:"resolution,omitempty"`
+	ExportFormat                   string     `json:"exportFormat" bson:"exportFormat,omitempty"`
 	Desc                           string      `json:"desc" bson:"desc"`
 	PaymentMethod                  string      `json:"paymentMethod" bson:"paymentMethod"`
 	IsR18                          bool        `json:"isR18" bson:"isR18"`
@@ -61,34 +61,3 @@ const (
 	CommissionStatePendingRequesterAcceptProduct           CommissionState = "PENDING_REQUESTER_ACCEPT_PRODUCT"
 	CommissionStateCompleted                               CommissionState = "COMPLETED"
 )
-
-func (c *Commission) ToArtworkCreator() model.ArtworkCreator {
-
-	var dayUsed = c.CompleteTime.Sub(c.CreateTime)
-
-	return model.ArtworkCreator{
-		CommissionID:         c.ID,
-		OpenCommissionID:     c.OpenCommissionID,
-		ArtistID:             c.ArtistID,
-		ArtistName:           c.ArtistName,
-		ArtistProfilePath:    c.ArtistProfilePath,
-		RequesterID:          c.RequesterID,
-		RequesterName:        c.RequesterName,
-		RequesterProfilePath: c.RequesterProfilePath,
-		Price:                c.Price,
-
-		DayUsed:              int(dayUsed),
-		Size:                 c.Size,
-		Volume:               0,
-		Resolution:           0,
-		Format:               "",
-
-		IsR18:                c.IsR18,
-		Anonymous:            c.Anonymous,
-		DisplayImagePath:     *c.DisplayImagePath,
-		CompletionFilePath:   *c.CompletionFilePath,
-		Rating:               *c.Rating,
-		Comment:              c.Comment,
-		CompleteTime:         *c.CompleteTime,
-	}
-}
