@@ -5,7 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	err2 "pixstall-artwork/app/artwork/delivery/http/resp/err"
-	get_artwork "pixstall-artwork/app/artwork/delivery/http/resp/get-artwork"
+	"pixstall-artwork/app/artwork/delivery/http/resp/get-artwork"
+	"pixstall-artwork/app/artwork/delivery/http/resp/get-artworks"
 	"pixstall-artwork/domain/artwork"
 	model2 "pixstall-artwork/domain/artwork/model"
 	error2 "pixstall-artwork/domain/error"
@@ -39,7 +40,25 @@ func (a ArtworkController) GetArtworks(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(err2.NewErrorResponse(err))
 		return
 	}
-	ctx.JSON(http.StatusOK, get_artwork.NewResponse(*artworks, filter.Offset, filter.Count))
+	ctx.JSON(http.StatusOK, get_artworks.NewResponse(*artworks, filter.Offset, filter.Count))
+}
+
+func (a ArtworkController) GetArtwork(ctx *gin.Context) {
+	artworkID := ctx.Param("id")
+	if artworkID == "" {
+		ctx.AbortWithStatusJSON(err2.NewErrorResponse(error2.BadRequestError))
+		return
+	}
+	dArtwork, err := a.useCase.GetArtwork(ctx, artworkID)
+	if err != nil {
+		ctx.AbortWithStatusJSON(err2.NewErrorResponse(err))
+		return
+	}
+	ctx.JSON(http.StatusOK, get_artwork.NewResponse(*dArtwork))
+}
+
+func (a ArtworkController) UpdateArtwork(ctx *gin.Context) {
+
 }
 
 func getFilter(ctx *gin.Context) (*model2.ArtworkFilter, error) {

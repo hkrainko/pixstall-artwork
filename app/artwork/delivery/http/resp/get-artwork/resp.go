@@ -6,9 +6,7 @@ import (
 )
 
 type Response struct {
-	Artworks []Artwork `json:"artworks"`
-	Offset   int       `json:"offSet"`
-	Count    int       `json:"count"`
+	Artwork Artwork `json:",inline"`
 }
 
 type Artwork struct {
@@ -40,46 +38,42 @@ type Artwork struct {
 	State          model.ArtworkState `json:"state"`
 }
 
-func NewResponse(artworks []model.Artwork, offset int, count int) *Response {
-	var rArtworks []Artwork
-	for _, a := range artworks {
-
-		var requesterID *string
-		var requesterName *string
-		var requesterProfilePath *string
-		if a.Anonymous {
-			requesterID = &a.RequesterID
-			requesterName = &a.RequesterName
-			requesterProfilePath = a.RequesterProfilePath
-		}
-
-		rArtworks = append(rArtworks, Artwork{
-			ID:                   a.ID,
-			OpenCommissionID:     a.OpenCommissionID,
-			ArtistID:             a.ArtistID,
-			ArtistName:           a.ArtistName,
-			ArtistProfilePath:    a.ArtistProfilePath,
-			RequesterID:          requesterID,
-			RequesterName:        requesterName,
-			RequesterProfilePath: requesterProfilePath,
-			Size:                 a.Size,
-			Volume:               a.Volume,
-			Resolution:           a.Resolution,
-			Format:               a.Format,
-			IsR18:                a.IsR18,
-			Anonymous:            a.Anonymous,
-			DisplayImagePath:     a.DisplayImagePath,
-			Rating:               a.Rating,
-			CreateTime:           a.CreateTime,
-			StartTime:            a.StartTime,
-			CompleteTime:         a.CompleteTime,
-			LastUpdateTime:       a.LastUpdateTime,
-			State:                a.State,
-		})
-	}
+func NewResponse(a model.Artwork) *Response {
 	return &Response{
-		Artworks: rArtworks,
-		Offset: offset,
-		Count: count,
+		Artwork: NewRespArtworkFormDomainArtwork(a),
+	}
+}
+
+func NewRespArtworkFormDomainArtwork(a model.Artwork) Artwork {
+	var requesterID *string
+	var requesterName *string
+	var requesterProfilePath *string
+	if a.Anonymous {
+		requesterID = &a.RequesterID
+		requesterName = &a.RequesterName
+		requesterProfilePath = a.RequesterProfilePath
+	}
+	return Artwork{
+		ID:                   a.ID,
+		OpenCommissionID:     a.OpenCommissionID,
+		ArtistID:             a.ArtistID,
+		ArtistName:           a.ArtistName,
+		ArtistProfilePath:    a.ArtistProfilePath,
+		RequesterID:          requesterID,
+		RequesterName:        requesterName,
+		RequesterProfilePath: requesterProfilePath,
+		Size:                 a.Size,
+		Volume:               a.Volume,
+		Resolution:           a.Resolution,
+		Format:               a.Format,
+		IsR18:                a.IsR18,
+		Anonymous:            a.Anonymous,
+		DisplayImagePath:     a.DisplayImagePath,
+		Rating:               a.Rating,
+		CreateTime:           a.CreateTime,
+		StartTime:            a.StartTime,
+		CompleteTime:         a.CompleteTime,
+		LastUpdateTime:       a.LastUpdateTime,
+		State:                a.State,
 	}
 }

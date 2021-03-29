@@ -2,25 +2,21 @@ package usecase
 
 import (
 	"context"
-	"pixstall-artwork/app/commission/delivery/rabbitmq/msg"
 	"pixstall-artwork/domain/artwork"
 	"pixstall-artwork/domain/artwork/model"
+	msgBroker "pixstall-artwork/domain/msg-broker"
 )
 
 type artworkUseCase struct {
 	artworkRepo artwork.Repo
+	msgBrokerRepo msgBroker.Repo
 }
 
-func NewArtworkUseCase(artworkRepo artwork.Repo) artwork.UseCase {
+func NewArtworkUseCase(artworkRepo artwork.Repo, msgBrokerRepo msgBroker.Repo) artwork.UseCase {
 	return &artworkUseCase{
 		artworkRepo: artworkRepo,
+		msgBrokerRepo: msgBrokerRepo,
 	}
-}
-
-func (a artworkUseCase) AddFromCompletedCommission(ctx context.Context, completedCommission msg.CompletedCommission) error {
-
-
-	return a.artworkRepo.
 }
 
 func (a artworkUseCase) AddArtwork(ctx context.Context, creator model.ArtworkCreator) (*model.Artwork, error) {

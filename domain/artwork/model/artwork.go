@@ -14,15 +14,14 @@ type Artwork struct {
 	RequesterName        string  `json:"requesterName" bson:"requesterName"`
 	RequesterProfilePath *string `json:"requesterProfilePath" bson:"requesterProfilePath,omitempty"`
 
-	Price      Price   `json:"price" bson:"price"`
+	DayUsed    time.Duration `json:"dayUsed" bson:"dayUsed"`
+	Size       Size          `json:"size" bson:"size"`
+	Volume     float64       `json:"volume" bson:"volume"`
+	Resolution float64       `json:"resolution" bson:"resolution"`
+	Format     string        `json:"format" bson:"format"`
 
-	Size       Size    `json:"size" bson:"size"`
-	Volume     float64 `json:"volume" bson:"volume"`
-	Resolution float64 `json:"resolution" bson:"resolution"`
-	Format     string  `json:"format" bson:"format"`
-
-	IsR18      bool    `json:"isR18" bson:"isR18"`
-	Anonymous  bool    `json:"anonymous" bson:"anonymous"`
+	IsR18     bool `json:"isR18" bson:"isR18"`
+	Anonymous bool `json:"anonymous" bson:"anonymous"`
 
 	DisplayImagePath   string  `json:"displayImagePath" bson:"displayImagePath"`
 	CompletionFilePath string  `json:"completionFilePath,omitempty" bson:"completionFilePath,omitempty"`
@@ -30,8 +29,8 @@ type Artwork struct {
 	Comment            *string `json:"comment,omitempty" bson:"comment,omitempty"`
 
 	CreateTime     time.Time    `json:"createTime" bson:"createTime"`
-	StartTime      time.Time   `json:"startTime" bson:"startTime"`
-	CompleteTime   time.Time   `json:"completeTime" bson:"completeTime"`
+	StartTime      time.Time    `json:"startTime" bson:"startTime"`
+	CompleteTime   time.Time    `json:"completeTime" bson:"completeTime"`
 	LastUpdateTime time.Time    `json:"lastUpdateTime" bson:"lastUpdateTime"`
 	State          ArtworkState `json:"state" bson:"state"`
 }

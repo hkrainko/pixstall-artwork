@@ -9,6 +9,7 @@ import (
 	"pixstall-artwork/app/artwork/delivery/http"
 	artwork_repo "pixstall-artwork/app/artwork/repo/mongo"
 	artwork_ucase "pixstall-artwork/app/artwork/usecase"
+	"pixstall-artwork/app/commission/delivery/rabbitmq"
 	msg_broker_repo "pixstall-artwork/app/msg-broker/repo/rabbitmq"
 )
 
@@ -19,8 +20,15 @@ func InitArtworkController(db *mongo.Database, conn *amqp.Connection) http.Artwo
 		artwork_repo.NewMongoArtworkRepo,
 		msg_broker_repo.NewRabbitMQMsgBrokerRepo,
 	)
-
 	return http.ArtworkController{}
 }
 
-func InitCommissionMessageBroker(db *mongo.Database)
+func InitCommissionMessageBroker(db *mongo.Database, conn *amqp.Connection) rabbitmq.CommissionMessageBroker {
+	wire.Build(
+		rabbitmq.NewCommissionMessageBroker,
+		artwork_ucase.NewArtworkUseCase,
+		artwork_repo.NewMongoArtworkRepo,
+		msg_broker_repo.NewRabbitMQMsgBrokerRepo,
+		)
+	return rabbitmq.CommissionMessageBroker{}
+}

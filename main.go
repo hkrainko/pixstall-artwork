@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
+	"pixstall-artwork/app/middleware"
 	"time"
 )
 
@@ -25,7 +26,7 @@ func main() {
 			panic(err)
 		}
 	}()
-	_ = dbClient.Database("pixstall-artwork")
+	db := dbClient.Database("pixstall-artwork")
 
 	//RabbitMQ
 	rbMQConn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
@@ -50,29 +51,22 @@ func main() {
 		log.Fatalf("Failed to create exchange %v", err)
 	}
 
-	//commMsgBroker := InitCommissionMessageBroker(db, rbMQConn, awsS3, hub)
-	//go commMsgBroker.StartUpdateCommissionQueue()
-	//go commMsgBroker.StartCommissionValidatedQueue()
-	//go commMsgBroker.StartCommissionMessageDeliverQueue()
-	//defer commMsgBroker.StopAllQueues()
+	commMsgBroker := InitCommissionMessageBroker(db, rbMQConn)
+	go commMsgBroker.StartCompletionToArtworkQueue()
 
 	// Gin
 	r := gin.Default()
 
-	//userIDExtractor := middleware.NewJWTPayloadsExtractor([]string{"userId"})
+	userIDExtractor := middleware.NewJWTPayloadsExtractor([]string{"userId"})
 
-	//apiGroup := r.Group("/api")
-	//artworkGroup := apiGroup.Group("/artworks")
-	//{
-	//	ctrl := InitArtworkController(db, rbMQConn)
-	//	artworkGroup.GET("", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.)
-	//	artworkGroup.GET("/:id", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.GetCommission)
-	//	artworkGroup.GET("/:id/details", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.GetCommissionDetails)
-	//	artworkGroup.GET("/:id/messages", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.GetMessages)
-	//	artworkGroup.POST("/:id/messages", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.CreateMessage)
-	//	artworkGroup.POST("", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.AddCommission)
-	//	artworkGroup.PATCH("/:id", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.UpdateCommission)
-	//}
+	apiGroup := r.Group("/api")
+	artworkGroup := apiGroup.Group("/artworks")
+	{
+		ctrl := InitArtworkController(db, rbMQConn)
+		artworkGroup.GET("", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.GetArtworks)
+		artworkGroup.GET("/:id", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.GetArtwork)
+		artworkGroup.PATCH("/:id", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.UpdateArtwork)
+	}
 
 	err = r.Run(":9005")
 	print(err)

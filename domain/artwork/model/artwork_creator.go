@@ -13,7 +13,6 @@ type ArtworkCreator struct {
 	RequesterName        string  `json:"requesterName" bson:"requesterName"`
 	RequesterProfilePath *string `json:"requesterProfilePath" bson:"requesterProfilePath,omitempty"`
 
-	//Price      Price   `json:"price" bson:"price"`
 	DayUsed    time.Duration `json:"dayUsed" bson:"dayUsed"`
 	Size       Size          `json:"size" bson:"size"`
 	Volume     float64       `json:"volume" bson:"volume"`
