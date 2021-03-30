@@ -20,20 +20,19 @@ type Artwork struct {
 	RequesterName        *string `json:"requesterName,omitempty"`
 	RequesterProfilePath *string `json:"requesterProfilePath,omitempty"`
 
-	Size       model.Size `json:"size"`
-	Volume     float64    `json:"volume"`
-	Resolution float64    `json:"resolution"`
-	Format     string     `json:"format"`
+	DayUsed   time.Duration `json:"dayUsed"`
+	IsR18     bool          `json:"isR18"`
+	Anonymous bool          `json:"anonymous"`
 
-	IsR18     bool `json:"isR18" bson:"isR18"`
-	Anonymous bool `json:"anonymous" bson:"anonymous"`
-
-	DisplayImagePath string `json:"displayImagePath"`
-	Rating           int    `json:"rating"`
+	Path        string     `json:"path"`
+	Volume      int64      `json:"volume"`
+	Size        model.Size `json:"size"`
+	ContentType string     `json:"contentType"`
+	Rating      int        `json:"rating"`
 
 	CreateTime     time.Time          `json:"createTime"`
 	StartTime      time.Time          `json:"startTime"`
-	CompleteTime   time.Time          `json:"completeTime"`
+	CompletedTime  time.Time          `json:"completedTime"`
 	LastUpdateTime time.Time          `json:"lastUpdateTime"`
 	State          model.ArtworkState `json:"state"`
 }
@@ -62,18 +61,20 @@ func NewRespArtworkFormDomainArtwork(a model.Artwork) Artwork {
 		RequesterID:          requesterID,
 		RequesterName:        requesterName,
 		RequesterProfilePath: requesterProfilePath,
-		Size:                 a.Size,
-		Volume:               a.Volume,
-		Resolution:           a.Resolution,
-		Format:               a.Format,
-		IsR18:                a.IsR18,
-		Anonymous:            a.Anonymous,
-		DisplayImagePath:     a.DisplayImagePath,
-		Rating:               a.Rating,
-		CreateTime:           a.CreateTime,
-		StartTime:            a.StartTime,
-		CompleteTime:         a.CompleteTime,
-		LastUpdateTime:       a.LastUpdateTime,
-		State:                a.State,
+
+		DayUsed:   a.DayUsed,
+		IsR18:     a.IsR18,
+		Anonymous: a.Anonymous,
+
+		Path:        a.Path,
+		Volume:      a.Volume,
+		Size:        a.Size,
+		ContentType: a.ContentType,
+		Rating:      a.Rating,
+
+		CreateTime:     a.CreateTime,
+		CompletedTime:  a.CompletedTime,
+		LastUpdateTime: a.LastUpdateTime,
+		State:          a.State,
 	}
 }

@@ -97,6 +97,7 @@ func (c CommissionMessageBroker) StartCompletionToArtworkQueue() {
 			case "commission.event.completed":
 				err := c.completionToArtwork(ctx, d.Body)
 				if err != nil {
+					log.Printf("completionToArtwork err:%v\n", err)
 					//TODO: error handling, store it ?
 				}
 				cancel()
@@ -107,6 +108,14 @@ func (c CommissionMessageBroker) StartCompletionToArtworkQueue() {
 	}()
 
 	<-forever
+}
+
+func (c CommissionMessageBroker) StopAllQueues() {
+	err := c.ch.Close()
+	if err != nil {
+		log.Printf("StopCommissionQueue err %v", err)
+	}
+	log.Printf("StopCommissionQueue success")
 }
 
 // Private handler

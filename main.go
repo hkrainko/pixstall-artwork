@@ -53,6 +53,7 @@ func main() {
 
 	commMsgBroker := InitCommissionMessageBroker(db, rbMQConn)
 	go commMsgBroker.StartCompletionToArtworkQueue()
+	defer commMsgBroker.StopAllQueues()
 
 	// Gin
 	r := gin.Default()

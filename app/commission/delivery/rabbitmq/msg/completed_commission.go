@@ -16,26 +16,20 @@ type CompletedCommission struct {
 	RequesterName        string  `json:"requesterName"`
 	RequesterProfilePath *string `json:"requesterProfilePath,omitempty"`
 
-	DayUsed    time.Duration `json:"dayUsed"`
-	Size       model.Size    `json:"size"`
-	Volume     float64       `json:"volume"`
-	Resolution float64       `json:"resolution"`
-	Format     string        `json:"format"`
-	IsR18      bool          `json:"isR18"`
-	Anonymous  bool          `json:"anonymous"`
+	DayUsed   time.Duration `json:"dayUsed"`
+	IsR18     bool          `json:"isR18"`
+	Anonymous bool          `json:"anonymous"`
 
-	DisplayImagePath   string  `json:"displayImagePath"`
-	CompletionFilePath string  `json:"completionFilePath"`
-	Rating             int     `json:"rating"`
-	Comment            *string `json:"comment,omitempty"`
+	DisplayImage       DisplayImage `json:"displayImage"`
+	CompletionFilePath string       `json:"completionFilePath"`
+	Rating             int          `json:"rating"`
+	Comment            *string      `json:"comment,omitempty"`
 
-	CreateTime   time.Time `json:"createTime" bson:"createTime"`
-	CompleteTime time.Time `json:"completeTime" bson:"completeTime,omitempty"`
+	CreateTime    time.Time `json:"createTime" bson:"createTime"`
+	CompletedTime time.Time `json:"completedTime" bson:"completedTime,omitempty"`
 }
 
 func (c CompletedCommission) ToArtworkCreator() model.ArtworkCreator {
-
-	dayUsed := c.CompleteTime.Sub(c.CreateTime)
 
 	return model.ArtworkCreator{
 		CommissionID:         c.ID,
@@ -46,17 +40,23 @@ func (c CompletedCommission) ToArtworkCreator() model.ArtworkCreator {
 		RequesterID:          c.RequesterID,
 		RequesterName:        c.RequesterName,
 		RequesterProfilePath: c.RequesterProfilePath,
-		DayUsed:              dayUsed,
-		Size:                 c.Size,
-		Volume:               0,
-		Resolution:           c.Resolution,
-		Format:               c.Format,
+		DayUsed:              c.DayUsed,
 		IsR18:                c.IsR18,
 		Anonymous:            c.Anonymous,
-		DisplayImagePath:     c.DisplayImagePath,
+		Path:                 c.DisplayImage.Path,
+		Volume:               c.DisplayImage.Volume,
+		Size:                 c.DisplayImage.Size,
+		ContentType:          c.DisplayImage.ContentType,
 		CompletionFilePath:   c.CompletionFilePath,
 		Rating:               c.Rating,
 		Comment:              c.Comment,
-		CompleteTime:         c.CreateTime,
+		CompletedTime:        c.CompletedTime,
 	}
+}
+
+type DisplayImage struct {
+	Path        string     `json:"path" bson:"path"`
+	Volume      int64      `json:"volume" bson:"volume"`
+	Size        model.Size `json:"size" bson:"size"`
+	ContentType string     `json:"contentType" bson:"contentType"`
 }
