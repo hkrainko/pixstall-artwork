@@ -10,8 +10,9 @@ type Response struct {
 }
 
 type Artwork struct {
-	ID               string `json:"id"`
-	OpenCommissionID string `json:"openCommissionId"`
+	ID               string  `json:"id"`
+	CommissionID     *string `json:"commissionId,omitempty"`
+	OpenCommissionID string  `json:"openCommissionId"`
 
 	ArtistID             string  `json:"artistId"`
 	ArtistName           string  `json:"artistName"`
