@@ -26,7 +26,14 @@ type Artwork struct {
 	Rating             int     `json:"rating" bson:"rating"`
 	Comment            *string `json:"comment,omitempty" bson:"comment,omitempty"`
 
+	Title       string          `json:"title"`
+	TextContent string          `json:"textContent"`
+	Views       int             `json:"views"`
+	Favors      map[string]bool `json:"favors"`
+	FavorCount  int             `json:"favorCount"`
+
 	CreateTime     time.Time    `json:"createTime" bson:"createTime"`
+	StartTime      time.Time    `json:"startTime" bson:"startTime"`
 	CompletedTime  time.Time    `json:"completedTime" bson:"completedTime"`
 	LastUpdateTime time.Time    `json:"lastUpdateTime" bson:"lastUpdateTime"`
 	State          ArtworkState `json:"state" bson:"state"`
@@ -37,6 +44,5 @@ type ArtworkState string
 const (
 	ArtworkStateActive    ArtworkState = "Active"
 	ArtworkStateHidden    ArtworkState = "Hidden"
-	ArtworkStateRemoved   ArtworkState = "Removed"
-	ArtworkStateForbidden ArtworkState = "Forbidden"
+	ArtworkStateDeleted   ArtworkState = "Deleted"
 )

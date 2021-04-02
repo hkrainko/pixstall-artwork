@@ -31,6 +31,12 @@ type Artwork struct {
 	ContentType string     `json:"contentType"`
 	Rating      int        `json:"rating"`
 
+	Title       string `json:"title"`
+	TextContent string `json:"textContent"`
+	Views       int    `json:"views"`
+	Favored     bool   `json:"favored"`
+	FavorCount  int    `json:"favorCount"`
+
 	CreateTime     time.Time          `json:"createTime"`
 	StartTime      time.Time          `json:"startTime"`
 	CompletedTime  time.Time          `json:"completedTime"`
@@ -38,13 +44,13 @@ type Artwork struct {
 	State          model.ArtworkState `json:"state"`
 }
 
-func NewResponse(a model.Artwork) *Response {
+func NewResponse(a model.Artwork, userID *string) *Response {
 	return &Response{
-		Artwork: NewRespArtworkFormDomainArtwork(a),
+		Artwork: NewRespArtworkFormDomainArtwork(a, userID),
 	}
 }
 
-func NewRespArtworkFormDomainArtwork(a model.Artwork) Artwork {
+func NewRespArtworkFormDomainArtwork(a model.Artwork, userID *string) Artwork {
 	var requesterID *string
 	var requesterName *string
 	var requesterProfilePath *string
@@ -52,6 +58,12 @@ func NewRespArtworkFormDomainArtwork(a model.Artwork) Artwork {
 		requesterID = &a.RequesterID
 		requesterName = &a.RequesterName
 		requesterProfilePath = a.RequesterProfilePath
+	}
+	favored := false
+	if userID != nil {
+		if _, ok := a.Favors[*userID]; ok {
+			favored = true
+		}
 	}
 	return Artwork{
 		ID:                   a.ID,
@@ -73,7 +85,14 @@ func NewRespArtworkFormDomainArtwork(a model.Artwork) Artwork {
 		ContentType: a.ContentType,
 		Rating:      a.Rating,
 
+		Title:       a.Title,
+		TextContent: a.TextContent,
+		Views:       a.Views,
+		Favored:     favored,
+		FavorCount:  len(a.Favors),
+
 		CreateTime:     a.CreateTime,
+		StartTime:      a.StartTime,
 		CompletedTime:  a.CompletedTime,
 		LastUpdateTime: a.LastUpdateTime,
 		State:          a.State,

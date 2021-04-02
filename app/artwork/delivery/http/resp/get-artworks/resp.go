@@ -11,10 +11,10 @@ type Response struct {
 	Count    int       `json:"count"`
 }
 
-func NewResponse(artworks []model.Artwork, offset int, count int) *Response {
+func NewResponse(artworks []model.Artwork, userID *string, offset int, count int) *Response {
 	var rArtworks []get_artwork.Artwork
 	for _, a := range artworks {
-		rArtworks = append(rArtworks, get_artwork.NewRespArtworkFormDomainArtwork(a))
+		rArtworks = append(rArtworks, get_artwork.NewRespArtworkFormDomainArtwork(a, userID))
 	}
 	return &Response{
 		Artworks: rArtworks,

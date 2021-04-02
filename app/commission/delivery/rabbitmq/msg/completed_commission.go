@@ -25,8 +25,9 @@ type CompletedCommission struct {
 	Rating             int          `json:"rating"`
 	Comment            *string      `json:"comment,omitempty"`
 
-	CreateTime    time.Time `json:"createTime" bson:"createTime"`
-	CompletedTime time.Time `json:"completedTime" bson:"completedTime,omitempty"`
+	StartTime     time.Time `json:"startTime"`
+	CreateTime    time.Time `json:"createTime"`
+	CompletedTime time.Time `json:"completedTime"`
 }
 
 func (c CompletedCommission) ToArtworkCreator() model.ArtworkCreator {
@@ -50,6 +51,7 @@ func (c CompletedCommission) ToArtworkCreator() model.ArtworkCreator {
 		CompletionFilePath:   c.CompletionFilePath,
 		Rating:               c.Rating,
 		Comment:              c.Comment,
+		StartTime:            c.StartTime,
 		CompletedTime:        c.CompletedTime,
 	}
 }

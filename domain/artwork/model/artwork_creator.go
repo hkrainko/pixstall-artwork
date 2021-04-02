@@ -25,5 +25,6 @@ type ArtworkCreator struct {
 	Rating             int     `json:"rating"`
 	Comment            *string `json:"comment,omitempty"`
 
+	StartTime     time.Time `json:"startTime"`
 	CompletedTime time.Time `json:"completedTime"`
 }
