@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"log"
 	"pixstall-artwork/app/artwork/repo/mongo/dao"
 	"pixstall-artwork/domain/artwork"
 	"pixstall-artwork/domain/artwork/model"
@@ -71,8 +72,10 @@ func (m mongoArtworkRepo) GetArtworks(ctx context.Context, filter model.ArtworkF
 	var dArtwork []model.Artwork
 	for cursor.Next(ctx) {
 		var r dao.Artwork
-		if err := cursor.Decode(&r); err != nil {
+		if err := cursor.Decode(&r); err == nil {
 			dArtwork = append(dArtwork, r.ToDomainArtwork())
+		} else {
+			log.Println(err)
 		}
 	}
 	return &dArtwork, nil
