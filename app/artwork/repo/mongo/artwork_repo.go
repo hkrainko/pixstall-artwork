@@ -43,7 +43,7 @@ func (m mongoArtworkRepo) AddArtwork(ctx context.Context, creator model.ArtworkC
 
 func (m mongoArtworkRepo) GetArtwork(ctx context.Context, artworkID string) (*model.Artwork, error) {
 	daoArtwork := dao.Artwork{}
-	err := m.collection.FindOne(ctx, bson.M{"id": artworkID}, nil).Decode(&daoArtwork)
+	err := m.collection.FindOne(ctx, bson.M{"id": artworkID}).Decode(&daoArtwork)
 	if err != nil {
 		switch err {
 		case mongo.ErrNoDocuments:
