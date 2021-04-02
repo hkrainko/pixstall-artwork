@@ -6,7 +6,7 @@ import (
 )
 
 type Response struct {
-	Artwork Artwork `json:",inline"`
+	Artwork `json:",inline"`
 }
 
 type Artwork struct {
@@ -54,7 +54,7 @@ func NewRespArtworkFormDomainArtwork(a model.Artwork, userID *string) Artwork {
 	var requesterID *string
 	var requesterName *string
 	var requesterProfilePath *string
-	if a.Anonymous {
+	if !a.Anonymous {
 		requesterID = &a.RequesterID
 		requesterName = &a.RequesterName
 		requesterProfilePath = a.RequesterProfilePath
