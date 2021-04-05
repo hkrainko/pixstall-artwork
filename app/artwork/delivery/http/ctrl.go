@@ -7,6 +7,8 @@ import (
 	err2 "pixstall-artwork/app/artwork/delivery/http/resp/err"
 	"pixstall-artwork/app/artwork/delivery/http/resp/get-artwork"
 	"pixstall-artwork/app/artwork/delivery/http/resp/get-artworks"
+	update_artwork "pixstall-artwork/app/artwork/delivery/http/resp/update-artwork"
+	update_artwork_favor "pixstall-artwork/app/artwork/delivery/http/resp/update-artwork-favor"
 	"pixstall-artwork/domain/artwork"
 	model2 "pixstall-artwork/domain/artwork/model"
 	error2 "pixstall-artwork/domain/error"
@@ -68,11 +70,11 @@ func (a ArtworkController) UpdateArtwork(ctx *gin.Context) {
 	artworkID := ctx.Param("id")
 	tokenUserID := ctx.GetString("userId")
 	if tokenUserID == "" {
-		ctx.AbortWithStatusJSON(http.StatusUnauthorized, nil)
+		ctx.AbortWithStatusJSON(err2.NewErrorResponse(error2.UnAuthError))
 		return
 	}
 	updater := model2.ArtworkUpdater{
-		ID:                   artworkID,
+		ID: artworkID,
 	}
 	if title, exist := ctx.GetPostForm("title"); exist {
 		updater.Title = &title
@@ -86,9 +88,10 @@ func (a ArtworkController) UpdateArtwork(ctx *gin.Context) {
 	}
 	err := a.useCase.UpdateArtwork(ctx, tokenUserID, updater)
 	if err != nil {
-
+		ctx.AbortWithStatusJSON(err2.NewErrorResponse(err))
+		return
 	}
-
+	ctx.JSON(http.StatusOK, update_artwork.NewResponse(artworkID))
 }
 
 func (a ArtworkController) GetArtworkFavors(ctx *gin.Context) {
@@ -96,7 +99,27 @@ func (a ArtworkController) GetArtworkFavors(ctx *gin.Context) {
 }
 
 func (a ArtworkController) UpdateArtworkFavors(ctx *gin.Context) {
-
+	artworkID := ctx.Param("id")
+	tokenUserID := ctx.GetString("userId")
+	if tokenUserID == "" {
+		ctx.AbortWithStatusJSON(err2.NewErrorResponse(error2.UnAuthError))
+		return
+	}
+	var isFavor bool
+	if favor, exist := ctx.GetPostForm("favor"); exist {
+		if favor == "true" {
+			isFavor = true
+		} else {
+			isFavor = false
+		}
+	} else {
+		ctx.AbortWithStatusJSON(err2.NewErrorResponse(error2.BadRequestError))
+	}
+	err := a.useCase.UpdateArtworkFavor(ctx, tokenUserID, artworkID, isFavor)
+	if err != nil {
+		ctx.AbortWithStatusJSON(err2.NewErrorResponse(err))
+	}
+	ctx.JSON(http.StatusOK, update_artwork_favor.NewResponse(artworkID, isFavor))
 }
 
 func getFilter(ctx *gin.Context) (*model2.ArtworkFilter, error) {
