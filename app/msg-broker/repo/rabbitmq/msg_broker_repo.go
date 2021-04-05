@@ -49,3 +49,25 @@ func (r rabbitmqMsgBrokerRepo) SendArtworkCreatedMessage(ctx context.Context, ar
 	}
 	return nil
 }
+
+func (r rabbitmqMsgBrokerRepo) SendArtworkUpdatedMessage(ctx context.Context, updater model.ArtworkUpdater, views *int, favorCount *int) error {
+	updatedArtwork := msg.NewUpdatedArtwork(updater, views, favorCount)
+	b, err := json.Marshal(updatedArtwork)
+	if err != nil {
+		return err
+	}
+	err = r.ch.Publish(
+		"artwork",
+		"artwork.event.created",
+		false,
+		false,
+		amqp.Publishing{
+			ContentType: "application/json",
+			Body:        b,
+		},
+	)
+	if err != nil {
+		return err
+	}
+	return nil
+}

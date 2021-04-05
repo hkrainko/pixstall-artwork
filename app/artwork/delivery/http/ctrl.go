@@ -65,6 +65,37 @@ func (a ArtworkController) GetArtwork(ctx *gin.Context) {
 }
 
 func (a ArtworkController) UpdateArtwork(ctx *gin.Context) {
+	artworkID := ctx.Param("id")
+	tokenUserID := ctx.GetString("userId")
+	if tokenUserID == "" {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, nil)
+		return
+	}
+	updater := model2.ArtworkUpdater{
+		ID:                   artworkID,
+	}
+	if title, exist := ctx.GetPostForm("title"); exist {
+		updater.Title = &title
+	}
+	if textContent, exist := ctx.GetPostForm("textContent"); exist {
+		updater.TextContent = &textContent
+	}
+	if state, exist := ctx.GetPostForm("state"); exist {
+		st := model2.ArtworkState(state)
+		updater.State = &st
+	}
+	err := a.useCase.UpdateArtwork(ctx, tokenUserID, updater)
+	if err != nil {
+
+	}
+
+}
+
+func (a ArtworkController) GetArtworkFavors(ctx *gin.Context) {
+
+}
+
+func (a ArtworkController) UpdateArtworkFavors(ctx *gin.Context) {
 
 }
 

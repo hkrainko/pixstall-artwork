@@ -10,7 +10,7 @@ type ArtworkUpdater struct {
 	RequesterProfilePath *string `json:"requesterProfilePath"`
 
 	Title       *string `json:"title"`
-	TextContext *string `json:"textContext"`
+	TextContent *string `json:"textContent"`
 	Favor       *string `json:"favor"`
 	Unfavor     *string `json:"unfavor"`
 

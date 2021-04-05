@@ -12,6 +12,8 @@ func (e DomainError) Error() string {
 		return "UnAuthError"
 	case BadRequestError:
 		return "BadRequestError"
+	case ForbiddenError:
+		return "ForbiddenError"
 	case UnknownError:
 		return "UnknownError"
 	default:
@@ -23,5 +25,6 @@ const (
 	NotFoundError   DomainError = 10
 	UnAuthError     DomainError = 11
 	BadRequestError DomainError = 12
+	ForbiddenError  DomainError = 13
 	UnknownError    DomainError = 99
 )

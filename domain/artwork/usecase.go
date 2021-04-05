@@ -9,5 +9,5 @@ type UseCase interface {
 	AddArtwork(ctx context.Context, creator model.ArtworkCreator) (*model.Artwork, error)
 	GetArtwork(ctx context.Context, artworkID string) (*model.Artwork, error)
 	GetArtworks(ctx context.Context, filter model.ArtworkFilter, sorter model.ArtworkSorter) (*[]model.Artwork, error)
-	UpdaterArtwork(ctx context.Context, artworkUpdater model.ArtworkUpdater) error
+	UpdateArtwork(ctx context.Context, requesterID string, artworkUpdater model.ArtworkUpdater) error
 }

@@ -67,6 +67,8 @@ func main() {
 		artworkGroup.GET("", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.GetArtworks)
 		artworkGroup.GET("/:id", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.GetArtwork)
 		artworkGroup.PATCH("/:id", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.UpdateArtwork)
+		artworkGroup.GET("/:id/favors", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.GetArtworkFavors)
+		artworkGroup.POST("/:id/favors", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.UpdateArtworkFavors)
 	}
 
 	err = r.Run(":9005")

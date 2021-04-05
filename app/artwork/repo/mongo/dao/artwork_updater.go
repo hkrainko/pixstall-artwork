@@ -27,8 +27,8 @@ func NewUpdaterFromArtworkUpdater(a model.ArtworkUpdater) bson.D {
 	if a.Title != nil {
 		setter = append(setter, bson.E{Key: "title", Value: a.Title})
 	}
-	if a.TextContext != nil {
-		setter = append(setter, bson.E{Key: "textContext", Value: a.TextContext})
+	if a.TextContent != nil {
+		setter = append(setter, bson.E{Key: "textContent", Value: a.TextContent})
 	}
 	if a.Favor != nil {
 		setter = append(setter, bson.E{Key: "favors." + *a.Favor, Value: true})

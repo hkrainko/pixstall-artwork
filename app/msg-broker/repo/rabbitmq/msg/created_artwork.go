@@ -47,6 +47,7 @@ func NewCreatedArtwork(artwork model.Artwork) CreatedArtwork {
 		Size:                 artwork.Size,
 		ContentType:          artwork.ContentType,
 		Rating:               artwork.Rating,
+		StartTime:            artwork.StartTime,
 		CompletedTime:        artwork.CompletedTime,
 		State:                artwork.State,
 	}
