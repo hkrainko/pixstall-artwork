@@ -7,18 +7,20 @@ import (
 
 type Response struct {
 	Artworks []get_artwork.Artwork `json:"artworks"`
-	Offset   int       `json:"offSet"`
-	Count    int       `json:"count"`
+	Offset   int                   `json:"offSet"`
+	Count    int                   `json:"count"`
+	Total    int                   `json:"total"`
 }
 
-func NewResponse(artworks []model.Artwork, userID *string, offset int, count int) *Response {
+func NewResponse(userID *string, result model.GetArtworksResult, offset int) *Response {
 	var rArtworks []get_artwork.Artwork
-	for _, a := range artworks {
+	for _, a := range result.Artwork {
 		rArtworks = append(rArtworks, get_artwork.NewRespArtworkFormDomainArtwork(a, userID))
 	}
 	return &Response{
 		Artworks: rArtworks,
-		Offset: offset,
-		Count: count,
+		Offset:   offset,
+		Count:    len(rArtworks),
+		Total:    result.Total,
 	}
 }

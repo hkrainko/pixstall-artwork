@@ -38,7 +38,7 @@ func (a artworkUseCase) GetArtwork(ctx context.Context, artworkID string) (*mode
 	return a.artworkRepo.GetArtwork(ctx, artworkID)
 }
 
-func (a artworkUseCase) GetArtworks(ctx context.Context, filter model.ArtworkFilter, sorter model.ArtworkSorter) (*[]model.Artwork, error) {
+func (a artworkUseCase) GetArtworks(ctx context.Context, filter model.ArtworkFilter, sorter model.ArtworkSorter) (*model.GetArtworksResult, error) {
 	return a.artworkRepo.GetArtworks(ctx, filter, sorter)
 }
 

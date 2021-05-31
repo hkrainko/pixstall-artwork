@@ -40,12 +40,12 @@ func (a ArtworkController) GetArtworks(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(err2.NewErrorResponse(error2.BadRequestError))
 		return
 	}
-	artworks, err := a.useCase.GetArtworks(ctx, *filter, *sorter)
+	getArtworkResult, err := a.useCase.GetArtworks(ctx, *filter, *sorter)
 	if err != nil {
 		ctx.AbortWithStatusJSON(err2.NewErrorResponse(err))
 		return
 	}
-	ctx.JSON(http.StatusOK, get_artworks.NewResponse(*artworks, tokenUserID, filter.Offset, filter.Count))
+	ctx.JSON(http.StatusOK, get_artworks.NewResponse(tokenUserID, *getArtworkResult, filter.Offset))
 }
 
 func (a ArtworkController) GetArtwork(ctx *gin.Context) {

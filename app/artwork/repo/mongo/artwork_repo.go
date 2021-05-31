@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
 	"pixstall-artwork/app/artwork/repo/mongo/dao"
 	"pixstall-artwork/domain/artwork"
 	"pixstall-artwork/domain/artwork/model"
@@ -56,29 +54,47 @@ func (m mongoArtworkRepo) GetArtwork(ctx context.Context, artworkID string) (*mo
 	return &dArtwork, nil
 }
 
-func (m mongoArtworkRepo) GetArtworks(ctx context.Context, filter model.ArtworkFilter, sorter model.ArtworkSorter) (*[]model.Artwork, error) {
-	daoFilter := dao.NewFilterFormDomainArtworkFilter(filter)
-	opts := options.FindOptions{}
-	os := int64(filter.Offset)
-	opts.Skip = &os
-	c := int64(filter.Count)
-	opts.Limit = &c
+func (m mongoArtworkRepo) GetArtworks(ctx context.Context, filter model.ArtworkFilter, sorter model.ArtworkSorter) (*model.GetArtworksResult, error) {
+	//daoFilter := dao.NewFilterFormDomainArtworkFilter(filter)
 
-	cursor, err := m.collection.Find(ctx, daoFilter, &opts)
+	var pipeline []bson.M
+	if filter.ArtistID != nil {
+		pipeline = append(pipeline, bson.M{"$match": bson.M{"artistId": filter.ArtistID}})
+	}
+	if filter.RequesterID != nil {
+		pipeline = append(pipeline, bson.M{"$match": bson.M{"requesterId": filter.ArtistID}})
+	}
+	pipeline = append(pipeline, bson.M{
+		"$facet": bson.M{
+			"total": []bson.M{{
+				"$count": "total",
+			}},
+			"artworks": bson.A{
+				bson.D{{"$skip", filter.Offset}},
+				bson.D{{"$limit", filter.Count}},
+			},
+		},
+	})
+	pipeline = append(pipeline, bson.M{
+		"$addFields": bson.M{
+			"total": bson.M{"$arrayElemAt": bson.A{"$total.total", 0}},
+		},
+	})
+
+	cursor, err := m.collection.Aggregate(ctx, pipeline)
+	defer cursor.Close(ctx)
 	if err != nil {
 		return nil, error2.UnknownError
 	}
-	defer cursor.Close(ctx)
-	var dArtwork []model.Artwork
+	var getArtworksResult *model.GetArtworksResult
 	for cursor.Next(ctx) {
-		var r dao.Artwork
-		if err := cursor.Decode(&r); err == nil {
-			dArtwork = append(dArtwork, r.ToDomainArtwork())
-		} else {
-			log.Println(err)
+		var r dao.GetArtworksResult
+		if err := cursor.Decode(&r); err != nil {
+			return nil, err
 		}
+		getArtworksResult = r.ToDomainGetArtworksResult()
 	}
-	return &dArtwork, nil
+	return getArtworksResult, nil
 }
 
 func (m mongoArtworkRepo) UpdaterArtwork(ctx context.Context, artworkUpdater model.ArtworkUpdater) error {
