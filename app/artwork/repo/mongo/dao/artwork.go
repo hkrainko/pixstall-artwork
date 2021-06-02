@@ -32,10 +32,10 @@ type Artwork struct {
 	Rating             int        `json:"rating" bson:"rating"`
 	Comment            *string    `json:"comment,omitempty" bson:"comment,omitempty"`
 
-	Title       string          `json:"title"`
-	TextContent string          `json:"textContent"`
-	Views       int             `json:"views"`
-	Favors      map[string]bool `json:"favors"`
+	Title       string          `json:"title" bson:"title"`
+	TextContent string          `json:"textContent" bson:"textContent"`
+	Views       int             `json:"views" bson:"views"`
+	Favors      map[string]bool `json:"favors" bson:"favors"`
 
 	CreateTime     time.Time          `json:"createTime" bson:"createTime"`
 	StartTime      time.Time          `json:"startTime" bson:"startTime"`
