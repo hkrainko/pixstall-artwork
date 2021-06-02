@@ -3,6 +3,7 @@ package dao
 import (
 	"go.mongodb.org/mongo-driver/bson"
 	"pixstall-artwork/domain/artwork/model"
+	"time"
 )
 
 func NewUpdaterFromArtworkUpdater(a model.ArtworkUpdater) bson.D {
@@ -33,6 +34,7 @@ func NewUpdaterFromArtworkUpdater(a model.ArtworkUpdater) bson.D {
 	if a.Favor != nil {
 		setter = append(setter, bson.E{Key: "favors." + *a.Favor, Value: true})
 	}
+	setter = append(setter, bson.E{Key: "lastUpdateTime", Value: time.Now()})
 
 	unsetter := bson.D{}
 	if a.Unfavor != nil {
