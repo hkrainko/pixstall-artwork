@@ -13,7 +13,7 @@ type Response struct {
 }
 
 func NewResponse(userID *string, result model.GetArtworksResult, offset int) *Response {
-	var rArtworks []get_artwork.Artwork
+	rArtworks := make([]get_artwork.Artwork, 0)
 	for _, a := range result.Artwork {
 		rArtworks = append(rArtworks, get_artwork.NewRespArtworkFormDomainArtwork(a, userID))
 	}
