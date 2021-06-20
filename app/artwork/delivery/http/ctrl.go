@@ -26,10 +26,10 @@ func NewArtworkController(useCase artwork.UseCase) ArtworkController {
 }
 
 func (a ArtworkController) GetArtworks(ctx *gin.Context) {
-	var tokenUserID *string
-	if s := ctx.GetString("userId"); s != "" {
-		tokenUserID = &s
-	}
+	//var tokenUserID *string
+	//if s := ctx.GetString("userId"); s != "" {
+	//	tokenUserID = &s
+	//}
 	filter, err := getFilter(ctx)
 	if err != nil {
 		ctx.AbortWithStatusJSON(err2.NewErrorResponse(error2.BadRequestError))
@@ -45,14 +45,14 @@ func (a ArtworkController) GetArtworks(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(err2.NewErrorResponse(err))
 		return
 	}
-	ctx.JSON(http.StatusOK, get_artworks.NewResponse(tokenUserID, *getArtworkResult, filter.Offset))
+	ctx.JSON(http.StatusOK, get_artworks.NewResponse(*getArtworkResult, filter.Offset))
 }
 
 func (a ArtworkController) GetArtwork(ctx *gin.Context) {
-	var tokenUserID *string
-	if s := ctx.GetString("userId"); s != "" {
-		tokenUserID = &s
-	}
+	//var tokenUserID *string
+	//if s := ctx.GetString("userId"); s != "" {
+	//	tokenUserID = &s
+	//}
 	artworkID := ctx.Param("id")
 	if artworkID == "" {
 		ctx.AbortWithStatusJSON(err2.NewErrorResponse(error2.BadRequestError))
@@ -63,7 +63,7 @@ func (a ArtworkController) GetArtwork(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(err2.NewErrorResponse(err))
 		return
 	}
-	ctx.JSON(http.StatusOK, get_artwork.NewResponse(*dArtwork, tokenUserID))
+	ctx.JSON(http.StatusOK, get_artwork.NewResponse(*dArtwork))
 }
 
 func (a ArtworkController) UpdateArtwork(ctx *gin.Context) {

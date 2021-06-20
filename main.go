@@ -64,7 +64,7 @@ func main() {
 	artworkGroup := apiGroup.Group("/artworks")
 	{
 		ctrl := InitArtworkController(db, rbMQConn)
-		artworkGroup.GET("", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.GetArtworks)
+		artworkGroup.GET("", ctrl.GetArtworks)
 		artworkGroup.GET("/:id", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.GetArtwork)
 		artworkGroup.PATCH("/:id", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.UpdateArtwork)
 		artworkGroup.GET("/:id/favors", userIDExtractor.ExtractPayloadsFromJWTInHeader, ctrl.GetArtworkFavors)

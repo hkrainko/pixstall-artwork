@@ -44,13 +44,13 @@ type Artwork struct {
 	State          model.ArtworkState `json:"state"`
 }
 
-func NewResponse(a model.Artwork, userID *string) *Response {
+func NewResponse(a model.Artwork) *Response {
 	return &Response{
-		Artwork: NewRespArtworkFormDomainArtwork(a, userID),
+		Artwork: NewRespArtworkFormDomainArtwork(a),
 	}
 }
 
-func NewRespArtworkFormDomainArtwork(a model.Artwork, userID *string) Artwork {
+func NewRespArtworkFormDomainArtwork(a model.Artwork) Artwork {
 	var requesterID *string
 	var requesterName *string
 	var requesterProfilePath *string
@@ -60,11 +60,11 @@ func NewRespArtworkFormDomainArtwork(a model.Artwork, userID *string) Artwork {
 		requesterProfilePath = a.RequesterProfilePath
 	}
 	favored := false
-	if userID != nil {
-		if _, ok := a.Favors[*userID]; ok {
-			favored = true
-		}
-	}
+	//if userID != nil {
+	//	if _, ok := a.Favors[*userID]; ok {
+	//		favored = true
+	//	}
+	//}
 	return Artwork{
 		ID:                   a.ID,
 		OpenCommissionID:     a.OpenCommissionID,

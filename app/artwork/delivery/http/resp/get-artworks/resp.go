@@ -12,10 +12,10 @@ type Response struct {
 	Total    int                   `json:"total"`
 }
 
-func NewResponse(userID *string, result model.GetArtworksResult, offset int) *Response {
+func NewResponse(result model.GetArtworksResult, offset int) *Response {
 	rArtworks := make([]get_artwork.Artwork, 0)
 	for _, a := range result.Artwork {
-		rArtworks = append(rArtworks, get_artwork.NewRespArtworkFormDomainArtwork(a, userID))
+		rArtworks = append(rArtworks, get_artwork.NewRespArtworkFormDomainArtwork(a))
 	}
 	return &Response{
 		Artworks: rArtworks,
