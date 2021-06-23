@@ -13,6 +13,7 @@ import (
 	"pixstall-artwork/app/artwork/usecase"
 	rabbitmq2 "pixstall-artwork/app/commission/delivery/rabbitmq"
 	"pixstall-artwork/app/msg-broker/repo/rabbitmq"
+	rabbitmq3 "pixstall-artwork/app/user/delivery/rabbitmq"
 )
 
 // Injectors from wire.go:
@@ -31,4 +32,12 @@ func InitCommissionMessageBroker(db *mongo.Database, conn *amqp.Connection) rabb
 	useCase := usecase.NewArtworkUseCase(repo, msg_brokerRepo)
 	commissionMessageBroker := rabbitmq2.NewCommissionMessageBroker(useCase, conn)
 	return commissionMessageBroker
+}
+
+func InitUserMessageBroker(db *mongo.Database, conn *amqp.Connection) rabbitmq3.UserMessageBroker {
+	repo := mongo2.NewMongoArtworkRepo(db)
+	msg_brokerRepo := rabbitmq.NewRabbitMQMsgBrokerRepo(conn)
+	useCase := usecase.NewArtworkUseCase(repo, msg_brokerRepo)
+	userMessageBroker := rabbitmq3.NewUserMessageBroker(useCase, conn)
+	return userMessageBroker
 }

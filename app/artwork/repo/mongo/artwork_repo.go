@@ -9,6 +9,7 @@ import (
 	"pixstall-artwork/domain/artwork"
 	"pixstall-artwork/domain/artwork/model"
 	error2 "pixstall-artwork/domain/error"
+	model2 "pixstall-artwork/domain/user/model"
 )
 
 type mongoArtworkRepo struct {
@@ -106,5 +107,43 @@ func (m mongoArtworkRepo) UpdaterArtwork(ctx context.Context, artworkUpdater mod
 	if err != nil {
 		return error2.UnknownError
 	}
+	return nil
+}
+
+func (m mongoArtworkRepo) UpdaterArtworkUser(ctx context.Context, updater model2.UserUpdater) error {
+	filter := bson.M{"artistId": updater.UserID}
+	updateContent := bson.M{}
+	if updater.UserName != nil {
+		updateContent["artistName"] = updater.UserName
+	}
+	if updater.ProfilePath != nil {
+		updateContent["artistProfilePath"] = updater.ProfilePath
+	}
+	update := bson.M{"$set": updateContent}
+
+	result, err := m.collection.UpdateMany(ctx, filter, update)
+	if err != nil {
+		fmt.Printf("%v\n", err)
+		return err
+	}
+	fmt.Printf("UpdateArtworkUser aritst count:%v\n", result.MatchedCount)
+
+	filter = bson.M{"requesterId": updater.UserID}
+	updateContent = bson.M{}
+	if updater.UserName != nil {
+		updateContent["requesterName"] = updater.UserName
+	}
+	if updater.ProfilePath != nil {
+		updateContent["requesterProfilePath"] = updater.ProfilePath
+	}
+	update = bson.M{"$set": updateContent}
+
+	result, err = m.collection.UpdateMany(ctx, filter, update)
+	if err != nil {
+		fmt.Printf("%v\n", err)
+		return err
+	}
+	fmt.Printf("UpdateArtworkUser requester count:%v\n", result.MatchedCount)
+
 	return nil
 }

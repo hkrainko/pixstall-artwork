@@ -7,6 +7,7 @@ import (
 	"pixstall-artwork/domain/artwork/model"
 	error2 "pixstall-artwork/domain/error"
 	msgBroker "pixstall-artwork/domain/msg-broker"
+	model2 "pixstall-artwork/domain/user/model"
 )
 
 type artworkUseCase struct {
@@ -101,4 +102,8 @@ func (a artworkUseCase) isAllowUpdateFavor(dArtwork *model.Artwork, requesterID 
 		return false
 	}
 	return true
+}
+
+func (a artworkUseCase) UpdateArtworkByUserUpdatedEvent(ctx context.Context, updater model2.UserUpdater) error {
+	return a.artworkRepo.UpdaterArtworkUser(ctx, updater)
 }

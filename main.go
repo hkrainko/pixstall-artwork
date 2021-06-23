@@ -55,6 +55,10 @@ func main() {
 	go commMsgBroker.StartCompletionToArtworkQueue()
 	defer commMsgBroker.StopAllQueues()
 
+	userMsgBroker := InitUserMessageBroker(db, rbMQConn)
+	go userMsgBroker.StartUserEventQueue()
+	defer userMsgBroker.StopAllQueues()
+
 	// Gin
 	r := gin.Default()
 
